@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/cameraMenu"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Capturar" />
+        <item
+            android:id="@+id/configMenu"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Configurações" />
+        <item android:id="@+id/logoutMenu"
+            android:icon="@drawable/ic_settings_power_black_24dp"
+            android:title="Sair"/>
+
+    </group>
+
+    <item android:title="Comunicação">
+        <menu>
+            <item
+                android:id="@+id/shareMenu"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+        </menu>
+    </item>
+
+</menu>
