@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="turismlocalization.projetct.com.turismlocalization.controller.CadastroUsuarioActivity">
+
+    <include
+        android:id="@+id/toolbar_principal"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="100dp"
+            >
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textColorHint="#edecee">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="149dp"
+                    app:srcCompat="@drawable/ic_new_user" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_nome"
+                android:layout_below="@id/input_layout_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="#edecee">
+
+                <EditText
+                    android:id="@+id/txtNome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/nome"
+                    android:textColor="#F8F8FF" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_idade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/input_layout_nome"
+                android:layout_marginTop="30dp"
+                android:textColorHint="#edecee">
+                <EditText
+                    android:id="@+id/txtIdade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/idade"
+                    android:inputType="number"
+                    android:textColor="#F8F8FF" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_contato"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/input_layout_idade"
+                android:layout_marginTop="5dp"
+                android:textColorHint="#edecee">
+
+                <EditText
+                    android:id="@+id/txtContato"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/contato"
+                    android:inputType="number"
+                    android:textColor="#F8F8FF" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/input_layout_contato"
+                android:layout_marginTop="5dp"
+                android:textColorHint="#edecee">
+
+                <EditText
+                    android:id="@+id/txtmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:textColor="#F8F8FF" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_senha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/input_layout_mail"
+                android:layout_marginTop="5dp"
+                android:textColorHint="#edecee">
+
+                <EditText
+                    android:id="@+id/txtSenha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/senha"
+                    android:inputType="textPassword"
+                    android:textColor="#F8F8FF"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/input_layout_senha"
+                android:layout_marginTop="5dp">
+
+                <Button
+                    android:id="@+id/btnCadastro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cadastrar" />
+            </android.support.design.widget.TextInputLayout>
+
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+
+</RelativeLayout>

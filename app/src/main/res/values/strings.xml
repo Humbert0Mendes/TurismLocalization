@@ -3,6 +3,21 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nome">Nome</string>
+    <string name="sexo">Sexo</string>
+    <string name="idade">Idade</string>
+    <string name="email">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="contato">Contato</string>
+    <string name="cadastrar">Cadastrar-se</string>
+    <string name="login">Login</string>
+    <string name="sair">Sair</string>
+    <string name="config">Configurações</string>
+    <string name="camera">Câmera</string>
+    <string name="abre">Open</string>
+    <string name="fecha">Close</string>
+    <string name="pesquisa">Pesquisar</string>
+
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
