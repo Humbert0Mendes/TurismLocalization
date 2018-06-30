@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "878785015410",
+    "firebase_url": "https://turismlocalization-64b1d.firebaseio.com",
+    "project_id": "turismlocalization-64b1d",
+    "storage_bucket": "turismlocalization-64b1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878785015410:android:44622186d2abd53a",
+        "android_client_info": {
+          "package_name": "turismlocalization.projetct.com.turismlocalization"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878785015410-bpbbbrebssgqis2jgtpb2c0qhhe2qme9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "turismlocalization.projetct.com.turismlocalization",
+            "certificate_hash": "907ccd4d59f903476544d9b4490d2ec6af7a5838"
+          }
+        },
+        {
+          "client_id": "878785015410-n3g9c0p2100cgsbmh96jebet3tvsatu9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbJnRntACLXkZfmaL8M2FZj8izJNMHsVQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878785015410-n3g9c0p2100cgsbmh96jebet3tvsatu9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
