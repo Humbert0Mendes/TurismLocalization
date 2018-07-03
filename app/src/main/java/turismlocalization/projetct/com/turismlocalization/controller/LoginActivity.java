@@ -84,6 +84,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    public void naoTemConta(View view) {
+        Intent it = new Intent(this, CadastroUsuarioActivity.class);
+        startActivity(it);
+    }
+
     @Override
     public void onStart() {
         super.onStart();

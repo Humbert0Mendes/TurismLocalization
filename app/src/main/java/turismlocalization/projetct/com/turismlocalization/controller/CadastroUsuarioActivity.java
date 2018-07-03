@@ -52,8 +52,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                 FirebaseUser fireUser = firebaseAuth.getCurrentUser();
             }
         };
-
-
-
     }
+
+
 }

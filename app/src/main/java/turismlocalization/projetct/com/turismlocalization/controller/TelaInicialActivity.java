@@ -1,5 +1,6 @@
 package turismlocalization.projetct.com.turismlocalization.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import turismlocalization.projetct.com.turismlocalization.R;
 
@@ -18,6 +24,7 @@ public class TelaInicialActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FragmentManager fragmentManager;
+    private IntentIntegrator qrScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,8 @@ public class TelaInicialActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.containerMaps, new MapsFragment(), "MapsFrament");
         fragmentTransaction.commit();
+
+        qrScan = new IntentIntegrator(this);
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -81,14 +90,35 @@ public class TelaInicialActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.cameraMenu) {
+
+            qrScan.initiateScan();
+
             // Handle the camera action
         } else if (id == R.id.configMenu) {
 
         } else if (id == R.id.logoutMenu) {
 
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null){
+            if(result.getContents()==null){
+                Toast.makeText(this, "Você cancelou o scan", Toast.LENGTH_LONG).show();
+            }
+            else{
+                result.getContents();
+            }
+        }
+        else{
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
