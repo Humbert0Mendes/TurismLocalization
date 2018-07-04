@@ -1,6 +1,7 @@
 package turismlocalization.projetct.com.turismlocalization.controller;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -10,21 +11,25 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import turismlocalization.projetct.com.turismlocalization.R;
+import turismlocalization.projetct.com.turismlocalization.dao.ConfigFirebase;
 
 public class TelaInicialActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FragmentManager fragmentManager;
     private IntentIntegrator qrScan;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +38,21 @@ public class TelaInicialActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Layout MenuLateral
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        //Autenticação Firebase
+        firebaseAuth= ConfigFirebase.getFirebaseAuth();
+
+        //Fragments GoogleMaps
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.containerMaps, new MapsFragment(), "MapsFrament");
         fragmentTransaction.commit();
-
-        qrScan = new IntentIntegrator(this);
-
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -91,14 +98,22 @@ public class TelaInicialActivity extends AppCompatActivity
 
         if (id == R.id.cameraMenu) {
 
-            qrScan.initiateScan();
+           IntentIntegrator integrator = new IntentIntegrator(this);
+           integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+            integrator.setPrompt("Scan");
+            integrator.setCameraId(0);
+            integrator.initiateScan();
 
             // Handle the camera action
         } else if (id == R.id.configMenu) {
 
         } else if (id == R.id.logoutMenu) {
-
+            firebaseAuth.signOut();
+            Intent it = new Intent(this, LoginActivity.class);
+            startActivity(it);
+            finish();
         }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -111,7 +126,10 @@ public class TelaInicialActivity extends AppCompatActivity
                 Toast.makeText(this, "Você cancelou o scan", Toast.LENGTH_LONG).show();
             }
             else{
-                result.getContents();
+                String teste = result.getContents();
+                Uri uri = Uri.parse(teste);
+                Intent intent = new Intent(Intent.ACTION_DEFAULT, uri);
+                startActivity(intent);
             }
         }
         else{

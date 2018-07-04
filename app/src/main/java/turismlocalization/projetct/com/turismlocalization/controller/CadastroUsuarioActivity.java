@@ -1,10 +1,12 @@
 package turismlocalization.projetct.com.turismlocalization.controller;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,5 +56,24 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         };
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        autenticacao.addAuthStateListener(listener);
 
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(listener!=null){
+            autenticacao.removeAuthStateListener(listener);
+        }
+    }
+
+    public void voltarLogin(View view) {
+        Intent itLogin = new Intent(this, LoginActivity.class);
+        startActivity(itLogin);
+        finish();
+    }
 }
