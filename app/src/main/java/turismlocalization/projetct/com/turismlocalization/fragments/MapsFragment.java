@@ -1,4 +1,4 @@
-package turismlocalization.projetct.com.turismlocalization.controller;
+package turismlocalization.projetct.com.turismlocalization.fragments;
 
 import android.os.Bundle;
 

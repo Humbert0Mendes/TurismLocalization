@@ -74,4 +74,15 @@ public class Usuarios {
         this.id = id;
     }
 
+    public Usuarios criarUsuario(String nome, String contato, int idade, String email, String senha, Usuarios user){
+
+        user.setNome(nome);
+        user.setContato(contato);
+        user.setIdade(idade);
+        user.setEmail(email);
+        user.setSenha(senha);
+
+        return user;
+    }
+
 }

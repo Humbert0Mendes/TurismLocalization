@@ -145,6 +145,7 @@
                     android:id="@+id/btnCadastro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="cadastroUser"
                     android:text="@string/cadastrar" />
             </android.support.design.widget.TextInputLayout>
 

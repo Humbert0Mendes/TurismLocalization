@@ -14,22 +14,34 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.Map;
+
 import turismlocalization.projetct.com.turismlocalization.R;
 import turismlocalization.projetct.com.turismlocalization.dao.ConfigFirebase;
+import turismlocalization.projetct.com.turismlocalization.fragments.MapsFragment;
 
 public class TelaInicialActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FragmentManager fragmentManager;
     private IntentIntegrator qrScan;
-    FirebaseAuth firebaseAuth;
+    FirebaseAuth firebaseAuth = ConfigFirebase.getFirebaseAuth();
+    DatabaseReference firebaseRef = ConfigFirebase.getFirebaseRef();
+    DatabaseReference userRef = firebaseRef.child("usuarios");
+    TextView nameUser;
+    TextView mailUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +49,9 @@ public class TelaInicialActivity extends AppCompatActivity
         setContentView(R.layout.activity_tela_inicial);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        nameUser = findViewById(R.id.txtNameUser);
+        mailUser = findViewById(R.id.txtMailUser);
 
         //Layout MenuLateral
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -47,12 +62,39 @@ public class TelaInicialActivity extends AppCompatActivity
 
         //Autenticação Firebase
         firebaseAuth= ConfigFirebase.getFirebaseAuth();
+        FirebaseUser fireUser = firebaseAuth.getCurrentUser();
+
+        String idUser = fireUser.getUid().toString();
+        DatabaseReference userReferencia = userRef.child(idUser);
+        userReferencia.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map<String, Object> mapa = (Map<String, Object>) dataSnapshot.getValue();
+
+                    Log.i("USUARIO", "USER"+mapa.keySet());
+                    Log.i("USUARIO", "USER"+mapa.get("email").toString());
+                    //mailUser.setText(mapa.get("email").toString());
+                    //nameUser.setText(mapa.get("nome").toString());
+                    String nome;
+                    String mail;
+                    nome = mapa.get("email").toString();
+                    mail = mapa.get("email").toString();
+                    Log.i("EMAIL", " USER " +nome+ " " + mail);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(TelaInicialActivity.this, "Erro:"+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
 
         //Fragments GoogleMaps
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.containerMaps, new MapsFragment(), "MapsFrament");
         fragmentTransaction.commit();
+
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
