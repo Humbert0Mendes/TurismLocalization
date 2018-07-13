@@ -31,6 +31,7 @@ import java.util.Map;
 import turismlocalization.projetct.com.turismlocalization.R;
 import turismlocalization.projetct.com.turismlocalization.dao.ConfigFirebase;
 import turismlocalization.projetct.com.turismlocalization.fragments.MapsFragment;
+import turismlocalization.projetct.com.turismlocalization.model.Usuarios;
 
 public class TelaInicialActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,8 +39,10 @@ public class TelaInicialActivity extends AppCompatActivity
     private FragmentManager fragmentManager;
     private IntentIntegrator qrScan;
     FirebaseAuth firebaseAuth = ConfigFirebase.getFirebaseAuth();
+    FirebaseUser fireUser;
     DatabaseReference firebaseRef = ConfigFirebase.getFirebaseRef();
     DatabaseReference userRef = firebaseRef.child("usuarios");
+    DatabaseReference userReferencia;
     TextView nameUser;
     TextView mailUser;
 
@@ -50,43 +53,20 @@ public class TelaInicialActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        nameUser = findViewById(R.id.txtNameUser);
-        mailUser = findViewById(R.id.txtMailUser);
+        nameUser = (TextView) findViewById(R.id.txtNameUser);
+        mailUser = (TextView) findViewById(R.id.txtMailUser);
 
         //Layout MenuLateral
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         //Autenticação Firebase
         firebaseAuth= ConfigFirebase.getFirebaseAuth();
-        FirebaseUser fireUser = firebaseAuth.getCurrentUser();
-
+        fireUser = firebaseAuth.getCurrentUser();
         String idUser = fireUser.getUid().toString();
-        DatabaseReference userReferencia = userRef.child(idUser);
-        userReferencia.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Map<String, Object> mapa = (Map<String, Object>) dataSnapshot.getValue();
-
-                    Log.i("USUARIO", "USER"+mapa.keySet());
-                    Log.i("USUARIO", "USER"+mapa.get("email").toString());
-                    //mailUser.setText(mapa.get("email").toString());
-                    //nameUser.setText(mapa.get("nome").toString());
-                    String nome;
-                    String mail;
-                    nome = mapa.get("email").toString();
-                    mail = mapa.get("email").toString();
-                    Log.i("EMAIL", " USER " +nome+ " " + mail);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(TelaInicialActivity.this, "Erro:"+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+        userReferencia = userRef.child(idUser);
 
         //Fragments GoogleMaps
         fragmentManager = getSupportFragmentManager();
@@ -94,10 +74,33 @@ public class TelaInicialActivity extends AppCompatActivity
         fragmentTransaction.add(R.id.containerMaps, new MapsFragment(), "MapsFrament");
         fragmentTransaction.commit();
 
-
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Usuarios user = dataSnapshot.getValue(Usuarios.class);
+                //Map<String, Object> mapa = (Map<String, Object>) user;
+                Log.i("USUARIO", "USER"+user.nome);
+                Log.i("USUARIO", "USER"+user.email);
+                mailUser.setText("123");
+                nameUser.setText("Novo");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(TelaInicialActivity.this, "Erro:"+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        };
+        userReferencia.addValueEventListener(userListener);
+
+
     }
 
     @Override
