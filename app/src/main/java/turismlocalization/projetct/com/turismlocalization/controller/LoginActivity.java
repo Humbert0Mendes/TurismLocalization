@@ -1,5 +1,6 @@
 package turismlocalization.projetct.com.turismlocalization.controller;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -22,14 +23,15 @@ import turismlocalization.projetct.com.turismlocalization.dao.ConfigFirebase;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private ProgressDialog progres;
     FirebaseAuth autenticacao;
     DatabaseReference firebaseDatabase;
     FirebaseUser fireUser;
     FirebaseAuth.AuthStateListener listener;
-    EditText edtLogin, edtSenha;
-    Button btnLogar;
-    String login;
-    String senha;
+    private EditText edtLogin, edtSenha;
+    private Button btnLogar;
+    private String login;
+    private String senha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,22 +65,21 @@ public class LoginActivity extends AppCompatActivity {
         senha = edtSenha.getText().toString();
 
         try {
-            autenticacao.signInWithEmailAndPassword(login, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        Log.i("Login:", "Usuário logado com sucesso");
-                        Intent it = new Intent(LoginActivity.this, TelaInicialActivity.class);
-                        startActivity(it);
-                        finish();
-                        fireUser = autenticacao.getCurrentUser();
-                        Toast.makeText(LoginActivity.this, "Bem vindo:" + fireUser.getEmail().toString(), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.i("Login:", "Usuário  não foi logado");
-                        Toast.makeText(LoginActivity.this, "Erro ao logar usuário, tente novamente" + task.getException(), Toast.LENGTH_SHORT).show();
+
+                autenticacao.signInWithEmailAndPassword(login, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.i("Login:", "Usuário logado com sucesso");
+                            Intent it = new Intent(LoginActivity.this, TelaInicialActivity.class);
+                            startActivity(it);
+                            finish();
+                        } else {
+                            Log.i("Login:", "Usuário  não foi logado");
+                            Toast.makeText(LoginActivity.this, "Erro ao logar usuário, tente novamente" + task.getException(), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
+                });
         }catch (Exception e){
             Toast.makeText(this, "Erro ao logar usuário:", Toast.LENGTH_SHORT).show();
         }

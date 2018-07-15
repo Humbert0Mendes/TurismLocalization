@@ -11,9 +11,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,8 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.util.Map;
-
 import turismlocalization.projetct.com.turismlocalization.R;
 import turismlocalization.projetct.com.turismlocalization.dao.ConfigFirebase;
 import turismlocalization.projetct.com.turismlocalization.fragments.MapsFragment;
@@ -38,13 +38,15 @@ public class TelaInicialActivity extends AppCompatActivity
 
     private FragmentManager fragmentManager;
     private IntentIntegrator qrScan;
+    private TextView nameUser;
+    private TextView mailUser;
     FirebaseAuth firebaseAuth = ConfigFirebase.getFirebaseAuth();
     FirebaseUser fireUser;
     DatabaseReference firebaseRef = ConfigFirebase.getFirebaseRef();
     DatabaseReference userRef = firebaseRef.child("usuarios");
     DatabaseReference userReferencia;
-    TextView nameUser;
-    TextView mailUser;
+    NavigationView navigationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +54,6 @@ public class TelaInicialActivity extends AppCompatActivity
         setContentView(R.layout.activity_tela_inicial);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        nameUser = (TextView) findViewById(R.id.txtNameUser);
-        mailUser = (TextView) findViewById(R.id.txtMailUser);
 
         //Layout MenuLateral
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -74,31 +73,27 @@ public class TelaInicialActivity extends AppCompatActivity
         fragmentTransaction.add(R.id.containerMaps, new MapsFragment(), "MapsFrament");
         fragmentTransaction.commit();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public void onStart(){
-        super.onStart();
-
-        ValueEventListener userListener = new ValueEventListener() {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        nameUser = headerView.findViewById(R.id.txtNameUser);
+        mailUser = headerView.findViewById(R.id.txtMailUser);
+        userReferencia.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Usuarios user = dataSnapshot.getValue(Usuarios.class);
                 //Map<String, Object> mapa = (Map<String, Object>) user;
-                Log.i("USUARIO", "USER"+user.nome);
-                Log.i("USUARIO", "USER"+user.email);
-                mailUser.setText("123");
-                nameUser.setText("Novo");
+                Log.i("USUARIO", "USER"+user.getId());
+                Log.i("USUARIO", "USER"+user.getEmail());
+                nameUser.setText(user.getNome().toString());
+                mailUser.setText(user.getEmail().toString());
+                navigationView.setNavigationItemSelectedListener(TelaInicialActivity.this);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(TelaInicialActivity.this, "Erro:"+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        };
-        userReferencia.addValueEventListener(userListener);
+        });
 
 
     }
