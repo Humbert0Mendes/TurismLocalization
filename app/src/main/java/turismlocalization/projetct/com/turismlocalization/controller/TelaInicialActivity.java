@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,15 +37,13 @@ public class TelaInicialActivity extends AppCompatActivity
 
     private FragmentManager fragmentManager;
     private IntentIntegrator qrScan;
-    private TextView nameUser;
-    private TextView mailUser;
+    private TextView nameUser, mailUser;
     FirebaseAuth firebaseAuth = ConfigFirebase.getFirebaseAuth();
     FirebaseUser fireUser;
     DatabaseReference firebaseRef = ConfigFirebase.getFirebaseRef();
     DatabaseReference userRef = firebaseRef.child("usuarios");
     DatabaseReference userReferencia;
     NavigationView navigationView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
