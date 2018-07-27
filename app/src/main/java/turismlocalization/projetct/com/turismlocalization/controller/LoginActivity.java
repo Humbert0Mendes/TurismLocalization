@@ -42,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
         edtLogin = findViewById(R.id.cpLogin);
         edtSenha = findViewById(R.id.cpSenha);
         btnLogar = findViewById(R.id.btnLogin);
+        progres = new ProgressDialog(this);
+        progres.setIndeterminate(true);
         listener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -65,8 +67,9 @@ public class LoginActivity extends AppCompatActivity {
         senha = edtSenha.getText().toString();
 
         try {
-
-                autenticacao.signInWithEmailAndPassword(login, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            progres.setMessage("Logando Usuário");
+            progres.show();
+            autenticacao.signInWithEmailAndPassword(login, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -74,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                             Intent it = new Intent(LoginActivity.this, TelaInicialActivity.class);
                             startActivity(it);
                             finish();
+                            progres.dismiss();
                         } else {
                             Log.i("Login:", "Usuário  não foi logado");
                             Toast.makeText(LoginActivity.this, "Erro ao logar usuário, tente novamente" + task.getException(), Toast.LENGTH_SHORT).show();

@@ -32,11 +32,10 @@ import turismlocalization.projetct.com.turismlocalization.dao.ConfigFirebase;
 import turismlocalization.projetct.com.turismlocalization.fragments.MapsFragment;
 import turismlocalization.projetct.com.turismlocalization.model.Usuarios;
 
-public class TelaInicialActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class TelaInicialActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FragmentManager fragmentManager;
     private IntentIntegrator qrScan;
+    private FragmentManager fragmentManager;
     private TextView nameUser, mailUser;
     FirebaseAuth firebaseAuth = ConfigFirebase.getFirebaseAuth();
     FirebaseUser fireUser;
@@ -70,7 +69,9 @@ public class TelaInicialActivity extends AppCompatActivity
         fragmentTransaction.add(R.id.containerMaps, new MapsFragment(), "MapsFrament");
         fragmentTransaction.commit();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        //Recuperando dados do usuário logado na aplicação
+        navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         nameUser = headerView.findViewById(R.id.txtNameUser);
         mailUser = headerView.findViewById(R.id.txtMailUser);
@@ -78,7 +79,6 @@ public class TelaInicialActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Usuarios user = dataSnapshot.getValue(Usuarios.class);
-                //Map<String, Object> mapa = (Map<String, Object>) user;
                 Log.i("USUARIO", "USER"+user.getId());
                 Log.i("USUARIO", "USER"+user.getEmail());
                 nameUser.setText(user.getNome().toString());
@@ -91,7 +91,6 @@ public class TelaInicialActivity extends AppCompatActivity
                 Toast.makeText(TelaInicialActivity.this, "Erro:"+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
 
     }
 

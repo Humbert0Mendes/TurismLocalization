@@ -2,23 +2,30 @@ package turismlocalization.projetct.com.turismlocalization.fragments;
 
 import android.content.Context;
 import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
+public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, LocationListener {
 
     private GoogleMap mMap;
-    private LocationManager locationManager;
+    private Marker currentLocation;
+    private LatLng currentLatLong;
+    private LatLng destino;
+    Location location;
+    LocationManager locationManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,6 +33,23 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         getMapAsync(this);
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        //GPS Enable
+        locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 100, this);
+    }
+
+    @Override
+    public  void onPause(){
+        super.onPause();
+
+        //GPS Disable
+        locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.removeUpdates(this);
+    }
 
     /**
      * Manipulates the map once available.
@@ -44,8 +68,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
             String provider = locationManager.getBestProvider(criteria, true);
-
-            Toast.makeText(getActivity(), "Provider: "+provider, Toast.LENGTH_SHORT).show();
+            location = new Location(provider);
 
             mMap = googleMap;
             mMap.setOnMapClickListener(this);
@@ -56,17 +79,73 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             Log.i("Error Map : ", "Erro ao iniciar GoogleMaps"+err);
         }
 
-            // Add a marker in Sydney and move the  camera
-            LatLng sydney = new LatLng(-33.87365, 151.20689);
-            MarkerOptions mark = new MarkerOptions();
-            mark.position(sydney);
-            mark.title("Marker in Sidney");
-            mMap.addMarker(mark);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        if(location != null){
+            currentLatLong = new LatLng(location.getLatitude(), location.getLongitude());
+            refreshMap();
+        }
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
         Toast.makeText(getContext(), "Coordenadas :" + latLng.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        if(currentLocation !=null){
+            currentLocation.remove();
+        }
+        currentLatLong = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(currentLatLong);
+        markerOptions.title("Vocês está aqui!");
+        currentLocation = mMap.addMarker(markerOptions);
+
+        final CameraPosition cameraPosition = new CameraPosition.Builder()
+              .target(currentLatLong) //Location
+              .zoom(17)             //Zoom
+              .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
+
+    public void refreshMap(){
+
+        mMap.clear();
+        if(currentLatLong != null){
+            mMap.addMarker(new MarkerOptions().position(currentLatLong).title("Você está aqui!"));
+        }
+
+        if(destino != null){
+            mMap.addMarker(new MarkerOptions().position(destino).title("Destino"));
+        }
+
+        if(currentLatLong !=null){
+            if(destino !=null){
+                LatLngBounds area = new LatLngBounds.Builder().include(currentLatLong).include(destino).build();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(area, 50));
+            }else{
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong, 17.0f));
+            }
+        }
+        //final CameraPosition cameraPosition = new CameraPosition.Builder()
+        //        .target(currentLatLong) //Location
+        //        .zoom(17)             //Zoom
+        //        .build();
     }
 }
