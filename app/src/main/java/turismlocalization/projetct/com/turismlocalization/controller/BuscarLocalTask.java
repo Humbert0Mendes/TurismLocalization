@@ -25,6 +25,7 @@ public class BuscarLocalTask extends AsyncTaskLoader<List<Address>> {
         mLocal = local;
     }
 
+
     @Override
      protected void onStartLoading(){
          if (mfoundAddresses ==null){

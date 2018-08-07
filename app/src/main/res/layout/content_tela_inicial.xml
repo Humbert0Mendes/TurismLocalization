@@ -16,4 +16,12 @@
             android:layout_height="match_parent"
             android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
+        <SearchView
+            android:id="@+id/searchIt"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            />
+
 </RelativeLayout>

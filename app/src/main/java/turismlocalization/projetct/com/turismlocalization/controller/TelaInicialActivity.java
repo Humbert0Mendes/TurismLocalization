@@ -1,11 +1,18 @@
 package turismlocalization.projetct.com.turismlocalization.controller;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,9 +22,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,16 +38,22 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.List;
+
 import turismlocalization.projetct.com.turismlocalization.R;
 import turismlocalization.projetct.com.turismlocalization.dao.ConfigFirebase;
 import turismlocalization.projetct.com.turismlocalization.fragments.MapsFragment;
 import turismlocalization.projetct.com.turismlocalization.model.Usuarios;
 
-public class TelaInicialActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class TelaInicialActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     private IntentIntegrator qrScan;
     private FragmentManager fragmentManager;
     private TextView nameUser, mailUser;
+    private SearchView searchView;
+    LatLng mDestino;
+    LocationManager locationManager;
+    LoaderManager loaderManager;
     FirebaseAuth firebaseAuth = ConfigFirebase.getFirebaseAuth();
     FirebaseUser fireUser;
     DatabaseReference firebaseRef = ConfigFirebase.getFirebaseRef();
@@ -68,6 +85,20 @@ public class TelaInicialActivity extends AppCompatActivity implements Navigation
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.containerMaps, new MapsFragment(), "MapsFrament");
         fragmentTransaction.commit();
+
+        //Inicializando funcionalidade do Search
+        searchView = findViewById(R.id.searchIt);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
 
 
         //Recuperando dados do usuário logado na aplicação
@@ -175,4 +206,46 @@ public class TelaInicialActivity extends AppCompatActivity implements Navigation
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        //Location location = locationManager.getLastKnownLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    private boolean estaCarregando(int id){
+        Loader<?> loader = loaderManager.getLoader(id);
+        if(loader != null){
+            return true;
+        }
+        return false;
+    }
+
+    LoaderManager.LoaderCallbacks<List<Address>> mBuscaLocalCallback = new LoaderManager.LoaderCallbacks<List<Address>>() {
+        @NonNull
+        @Override
+        public Loader<List<Address>> onCreateLoader(int id, @Nullable Bundle args) {
+            return new BuscarLocalTask(TelaInicialActivity.this, searchView.getQuery().toString());
+        }
+
+        @Override
+        public void onLoadFinished(@NonNull Loader<List<Address>> loader, List<Address> data) {
+
+        }
+
+        @Override
+        public void onLoaderReset(@NonNull Loader<List<Address>> loader) {
+
+        }
+    };
+
 }
