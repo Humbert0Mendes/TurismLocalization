@@ -8,6 +8,11 @@
             android:id="@+id/cameraMenu"
             android:icon="@drawable/ic_menu_camera"
             android:title="Capturar" />
+
+        <item
+            android:id="@+id/search"
+            android:icon="@drawable/ic_search_black"
+            android:title="Pesquisar"/>
         <item
             android:id="@+id/configMenu"
             android:icon="@drawable/ic_menu_manage"

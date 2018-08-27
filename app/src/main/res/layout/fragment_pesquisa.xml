@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="turismlocalization.projetct.com.turismlocalization.fragments.PesquisaFragment">
+
+
+    <EditText
+        android:id="@+id/txtPartida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="80dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/partida"
+        />
+
+    <EditText
+        android:id="@+id/txtDestino"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/txtPartida"
+        android:layout_centerInParent="true"
+        android:hint="@string/destino"
+        android:inputType="textPersonName"
+        />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtDestino"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/white_border"
+        android:text="@string/btn_buscar"
+        android:elevation="10dp"
+        android:textColor="@android:color/black"/>
+
+</RelativeLayout>

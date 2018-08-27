@@ -22,4 +22,11 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txtHintSearch">Digite um Endereço ou ponto desejado</string>
+    <string name="destino">Destino</string>
+    <string name="partida">Partida</string>
+    <string name="btn_buscar">Buscar</string>
 </resources>

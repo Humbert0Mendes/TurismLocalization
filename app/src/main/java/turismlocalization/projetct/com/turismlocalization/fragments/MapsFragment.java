@@ -99,7 +99,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         currentLatLong = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(currentLatLong);
-        markerOptions.title("Vocês está aqui!");
+        markerOptions.title("Você está aqui!");
         currentLocation = mMap.addMarker(markerOptions);
 
         final CameraPosition cameraPosition = new CameraPosition.Builder()

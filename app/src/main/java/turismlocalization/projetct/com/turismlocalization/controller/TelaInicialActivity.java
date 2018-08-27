@@ -30,6 +30,7 @@ import com.google.zxing.integration.android.IntentResult;
 import turismlocalization.projetct.com.turismlocalization.R;
 import turismlocalization.projetct.com.turismlocalization.dao.ConfigFirebase;
 import turismlocalization.projetct.com.turismlocalization.fragments.MapsFragment;
+import turismlocalization.projetct.com.turismlocalization.fragments.PesquisaFragment;
 import turismlocalization.projetct.com.turismlocalization.model.Usuarios;
 
 public class TelaInicialActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -148,6 +149,9 @@ public class TelaInicialActivity extends AppCompatActivity implements Navigation
             Intent it = new Intent(this, LoginActivity.class);
             startActivity(it);
             finish();
+        }else if(id == R.id.search){
+            Intent it = new Intent(this, PesquisaFragmentActivity.class);
+            startActivity(it);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -171,7 +175,6 @@ public class TelaInicialActivity extends AppCompatActivity implements Navigation
         else{
             super.onActivityResult(requestCode, resultCode, data);
         }
-
 
         super.onActivityResult(requestCode, resultCode, data);
     }
